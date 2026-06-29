@@ -1,0 +1,32 @@
+@baseUrl = http://localhost:5124/api/v1
+@adminEmail = admin@iod.com
+@adminPassword = admin123
+
+### 1. Login to get token (This will invalidate old tokens on other devices!)
+# @name loginReq
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "{{adminEmail}}",
+  "password": "{{adminPassword}}"
+}
+
+### Store Token
+@token = {{loginReq.response.body.token}}
+
+### 2. Get Employee Directory
+GET {{baseUrl}}/admin/employees
+Authorization: Bearer {{token}}
+
+### 3. Get Active Visitors
+GET {{baseUrl}}/visitor/active
+Authorization: Bearer {{token}}
+
+### 4. Fetch Live Active Duties (Decrypts GPS automatically)
+GET {{baseUrl}}/duty/active
+Authorization: Bearer {{token}}
+
+### 5. Check-In Security Target (Watchlist)
+GET {{baseUrl}}/admin/watchlist
+Authorization: Bearer {{token}}
